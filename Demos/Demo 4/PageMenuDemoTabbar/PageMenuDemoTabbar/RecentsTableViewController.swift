@@ -18,16 +18,16 @@ class RecentsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tableView.registerNib(UINib(nibName: "RecentsTableViewCell", bundle: nil), forCellReuseIdentifier: "RecentsTableViewCell")
+        self.tableView.register(UINib(nibName: "RecentsTableViewCell", bundle: nil), forCellReuseIdentifier: "RecentsTableViewCell")
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        println("recents page: viewWillAppear")
+        print("recents page: viewWillAppear")
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         self.tableView.showsVerticalScrollIndicator = false
         super.viewDidAppear(animated)
         self.tableView.showsVerticalScrollIndicator = true
@@ -41,46 +41,40 @@ class RecentsTableViewController: UITableViewController {
     }
     
     // MARK: - Table view data source
-    
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Potentially incomplete method implementation.
-        // Return the number of sections.
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete method implementation.
-        // Return the number of rows in the section.
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 10
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell : RecentsTableViewCell = tableView.dequeueReusableCellWithIdentifier("RecentsTableViewCell") as RecentsTableViewCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell : RecentsTableViewCell = tableView.dequeueReusableCell(withIdentifier: "RecentsTableViewCell") as! RecentsTableViewCell
         
         // Configure the cell...
         cell.nameLabel.text = namesArray[indexPath.row]
         cell.photoImageView.image = UIImage(named: photoNameArray[indexPath.row])
-        cell.dateLabel.text = dateArray[indexPath.row] as NSString
+        cell.dateLabel.text = dateArray[indexPath.row] as! NSString as String
         cell.nameLabel.textColor = UIColor(red: 85.0/255.0, green: 85.0/255.0, blue: 85.0/255.0, alpha: 1.0)
         
-        if activityTypeArray[indexPath.row] as Int == 0 {
+        if activityTypeArray[indexPath.row] as! Int == 0 {
             cell.activityImageView.image = UIImage(named: "phone_send")
-        } else if activityTypeArray[indexPath.row] as Int == 1 {
+        } else if activityTypeArray[indexPath.row] as! Int == 1 {
             cell.activityImageView.image = UIImage(named: "phone_receive")
         } else {
             cell.activityImageView.image = UIImage(named: "phone_down")
-            cell.nameLabel.textColor = UIColor.redColor()
+            cell.nameLabel.textColor = UIColor.red
         }
         
         return cell
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 94.0
     }
     
-    override func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0.001
     }
-    
 }
