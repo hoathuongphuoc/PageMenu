@@ -14,7 +14,7 @@ extension CAPSPageMenu : UIScrollViewDelegate {
         if !didLayoutSubviewsAfterRotation {
             if scrollView.isEqual(controllerScrollView) {
                 if scrollView.contentOffset.x >= 0.0 && scrollView.contentOffset.x <= (CGFloat(controllerArray.count - 1) * self.view.frame.width) {
-                    if (currentOrientationIsPortrait && UIApplication.shared.statusBarOrientation.isPortrait) || (!currentOrientationIsPortrait && UIApplication.shared.statusBarOrientation.isLandscape) {
+                    if (currentOrientationIsPortrait && Orientation.isPortrait) || (!currentOrientationIsPortrait && Orientation.isLandscape) {
                         // Check if scroll direction changed
                         if !didTapMenuItemToScroll {
                             if didScrollAlready {

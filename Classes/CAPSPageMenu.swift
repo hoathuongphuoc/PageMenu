@@ -26,6 +26,25 @@ import UIKit
     @objc optional func didMoveToPage(_ controller: UIViewController, index: Int)
 }
 
+struct Orientation {
+    // indicate current device is in the LandScape orientation
+    static var isLandscape: Bool {
+        get {
+            return UIDevice.current.orientation.isValidInterfaceOrientation
+                ? UIDevice.current.orientation.isLandscape
+                : UIApplication.shared.statusBarOrientation.isLandscape
+        }
+    }
+    // indicate current device is in the Portrait orientation
+    static var isPortrait: Bool {
+        get {
+            return UIDevice.current.orientation.isValidInterfaceOrientation
+                ? UIDevice.current.orientation.isPortrait
+                : UIApplication.shared.statusBarOrientation.isPortrait
+        }
+    }
+}
+
 open class CAPSPageMenu: UIViewController {
 
     //MARK: - Configuration
@@ -213,7 +232,7 @@ extension CAPSPageMenu {
         
         newVC.willMove(toParentViewController: self)
         
-        newVC.view.frame = CGRect(x: self.view.frame.width * CGFloat(index), y: configuration.menuHeight, width: self.view.frame.width, height: self.view.frame.height - configuration.menuHeight)
+        newVC.view.frame = CGRect(x: self.view.frame.width * CGFloat(index), y: 0, width: self.view.frame.width, height: self.view.frame.height - configuration.menuHeight)
         
         self.addChildViewController(newVC)
         self.controllerScrollView.addSubview(newVC.view)
@@ -239,12 +258,9 @@ extension CAPSPageMenu {
         controllerScrollView.contentSize = CGSize(width: self.view.frame.width * CGFloat(controllerArray.count), height: self.view.frame.height - configuration.menuHeight)
         
         let oldCurrentOrientationIsPortrait : Bool = currentOrientationIsPortrait
+        currentOrientationIsPortrait = Orientation.isPortrait
         
-        if UIDevice.current.orientation != UIDeviceOrientation.unknown {
-            currentOrientationIsPortrait = UIDevice.current.orientation.isPortrait || UIDevice.current.orientation.isFlat
-        }
-        
-        if (oldCurrentOrientationIsPortrait && UIDevice.current.orientation.isLandscape) || (!oldCurrentOrientationIsPortrait && (UIDevice.current.orientation.isPortrait || UIDevice.current.orientation.isFlat)) {
+        if (oldCurrentOrientationIsPortrait && Orientation.isLandscape) || (!oldCurrentOrientationIsPortrait && Orientation.isPortrait) {
             didLayoutSubviewsAfterRotation = true
             
             //Resize menu items if using as segmented control
@@ -291,7 +307,7 @@ extension CAPSPageMenu {
             }
             
             for view in controllerScrollView.subviews {
-                view.frame = CGRect(x: self.view.frame.width * CGFloat(self.currentPageIndex), y: configuration.menuHeight, width: controllerScrollView.frame.width, height: self.view.frame.height - configuration.menuHeight)
+                view.frame = CGRect(x: self.view.frame.width * CGFloat(self.currentPageIndex), y: 0, width: controllerScrollView.frame.width, height: self.view.frame.height - configuration.menuHeight)
             }
             
             let xOffset : CGFloat = CGFloat(self.currentPageIndex) * controllerScrollView.frame.width

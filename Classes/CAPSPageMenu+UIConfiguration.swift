@@ -70,7 +70,22 @@ extension CAPSPageMenu {
     }
     
     func setUpUserInterface() {
+        controllerScrollView.frame = CGRect(x: 0.0, y: configuration.menuHeight, width: self.view.frame.width, height: self.view.frame.height - configuration.menuHeight)
+        self.view.addSubview(controllerScrollView)
+        
+        menuScrollView.frame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: configuration.menuHeight)
+        self.view.addSubview(menuScrollView)
+        
         let viewsDictionary = ["menuScrollView":menuScrollView, "controllerScrollView":controllerScrollView]
+        
+        // Set up menu scroll view
+        menuScrollView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let menuScrollView_constraint_H:Array = NSLayoutConstraint.constraints(withVisualFormat: "H:|[menuScrollView]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary)
+        let menuScrollView_constraint_V:Array = NSLayoutConstraint.constraints(withVisualFormat: "V:|[menuScrollView(\(configuration.menuHeight))]", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary)
+        
+        self.view.addConstraints(menuScrollView_constraint_H)
+        self.view.addConstraints(menuScrollView_constraint_V)
         
         // Set up controller scroll view
         controllerScrollView.isPagingEnabled = true
@@ -78,29 +93,16 @@ extension CAPSPageMenu {
         controllerScrollView.alwaysBounceHorizontal = configuration.enableHorizontalBounce
         controllerScrollView.bounces = configuration.enableHorizontalBounce
         
-        controllerScrollView.frame = CGRect(x: 0.0, y: configuration.menuHeight, width: self.view.frame.width, height: self.view.frame.height)
+        controllerScrollView.frame = CGRect(x: 0.0, y: configuration.menuHeight, width: self.view.frame.width, height: self.view.frame.height - configuration.menuHeight)
         
         self.view.addSubview(controllerScrollView)
         
         let controllerScrollView_constraint_H:Array = NSLayoutConstraint.constraints(withVisualFormat: "H:|[controllerScrollView]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary)
-        let controllerScrollView_constraint_V:Array = NSLayoutConstraint.constraints(withVisualFormat: "V:|[controllerScrollView]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary)
-        
+        let controllerScrollView_constraint_V:Array = NSLayoutConstraint.constraints(withVisualFormat: "V:|[menuScrollView]-0-[controllerScrollView]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary)
+    
         self.view.addConstraints(controllerScrollView_constraint_H)
         self.view.addConstraints(controllerScrollView_constraint_V)
-        
-        // Set up menu scroll view
-        menuScrollView.translatesAutoresizingMaskIntoConstraints = false
-        
-        menuScrollView.frame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: configuration.menuHeight)
-        
-        self.view.addSubview(menuScrollView)
-        
-        let menuScrollView_constraint_H:Array = NSLayoutConstraint.constraints(withVisualFormat: "H:|[menuScrollView]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary)
-        let menuScrollView_constraint_V:Array = NSLayoutConstraint.constraints(withVisualFormat: "V:[menuScrollView(\(configuration.menuHeight))]", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary)
-        
-        self.view.addConstraints(menuScrollView_constraint_H)
-        self.view.addConstraints(menuScrollView_constraint_V)
-        
+
         // Add hairline to menu scroll view
         if configuration.addBottomMenuHairline {
             let menuBottomHairline : UIView = UIView()
@@ -249,4 +251,5 @@ extension CAPSPageMenu {
         menuScrollView.addSubview(selectionIndicatorView)
     }
 }
+
 
